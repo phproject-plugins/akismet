@@ -1,0 +1,20 @@
+<form action="{{ @BASE . @PATH }}" method="post">
+	<p>Enter your <a href="https://akismet.com/account/" target="_blank">Akismet API key</a> to enable the spam filter</p>
+	<div class="form-group">
+		<label for="input-api-key">API Key</label>
+		<input type="text" class="form-control input-sm" id="input-api-key" name="api_key" value="{{ @site.plugins.akismet.api_key }}">
+	</div>
+	<button class="btn btn-primary btn-sm" type="submit">Save</button>
+	<check if="{{ @@error }}">
+		&ensp;
+		<span class="text-danger">
+			<span class="fa fa-exclamation-triangle"></span>&ensp;{{ @error }}
+		</span>
+	</check>
+	<check if="{{ @@POST.api_key }}">
+		&ensp;
+		<span class="text-success">
+			<span class="fa fa-check"></span>&ensp;Changes saved successfully
+		</span>
+	</check>
+</form>
