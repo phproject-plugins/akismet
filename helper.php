@@ -14,14 +14,24 @@ class Helper extends \Prefab {
 	 * @return boolean
 	 */
 	public function isSpam($string, $type = "issue", $ip = null, $agent = null) {
+		$f3 = \Base::instance();
+
 		// Get API key
-		$key = \Base::instance()->get("site.plugins.akismet.api_key");
+		$key = $f3->get("site.plugins.akismet.api_key");
 		if (!$key) {
 			return false;
 		}
 
+		// Get user data
+		if ($ip === null) {
+			$ip = $f3->get("IP");
+		}
+		if ($agent === null) {
+			$agent = $f3->get("AGENT");
+		}
+
 		// Build request object
-		$url = \Base::instance()->get("site.url");
+		$url = $f3->get("site.url");
 		$params = array(
 			"blog" => $url,
 			"comment_content" => $string,

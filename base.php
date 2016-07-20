@@ -52,6 +52,9 @@ class Base extends \Plugin {
 	public function issueBeforeSave(\Model\Issue $issue) {
 		$helper = Helper::instance();
 		if ($helper->isSpam($issue->description, "issue")) {
+			$f3 = \Base::instance();
+			$log = new \Log("akismet.log");
+			$log->write("Issue blocked: " . $f3->get("IP") . " - " . $f3->get("AGENT"));
 			throw new \Exception("Spam detected, not saving.");
 		}
 		return $issue;
@@ -66,6 +69,9 @@ class Base extends \Plugin {
 	public function commentBeforeSave(\Model\Issue\Comment $comment) {
 		$helper = Helper::instance();
 		if ($helper->isSpam($comment->text, "issue")) {
+			$f3 = \Base::instance();
+			$log = new \Log("akismet.log");
+			$log->write("Comment blocked: " . $f3->get("IP") . " - " . $f3->get("AGENT"));
 			throw new \Exception("Spam detected, not saving.");
 		}
 		return $comment;
