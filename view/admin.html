@@ -11,10 +11,10 @@
 			<span class="fa fa-exclamation-triangle"></span>&ensp;{{ @error }}
 		</span>
 	</check>
-	<check if="{{ @@POST.api_key }}">
+	<check if="{{ @@POST.api_key || @@success }}">
 		&ensp;
 		<span class="text-success">
-			<span class="fa fa-check"></span>&ensp;Changes saved successfully
+			<span class="fa fa-check"></span>&ensp;{{ @@success ?: 'Changes saved successfully' }}
 		</span>
 	</check>
 </form>

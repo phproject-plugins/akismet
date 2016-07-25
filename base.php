@@ -31,13 +31,18 @@ class Base extends \Plugin {
 	 */
 	public function _admin() {
 		$f3 = \Base::instance();
-		if ($f3->get("POST.api_key")) {
-			$helper = Helper::instance();
-			if ($helper->isKeyValid($f3->get("POST.api_key"))) {
-				\Model\Config::setVal("site.plugins.akismet.api_key", $f3->get("POST.api_key"));
+		if ($f3->exists("POST.api_key")) {
+			if($f3->get("POST.api_key")) {
+				$helper = Helper::instance();
+				if ($helper->isKeyValid($f3->get("POST.api_key"))) {
+					\Model\Config::setVal("site.plugins.akismet.api_key", $f3->get("POST.api_key"));
+				} else {
+					$f3->set("error", "Invalid API key.");
+					$f3->set("POST.api_key", null);
+				}
 			} else {
-				$f3->set("error", "Invalid API key.");
-				$f3->set("POST.api_key", null);
+				\Model\Config::setVal("site.plugins.akismet.api_key", null);
+				$f3->set("success", "Key removed, spam filter disabled.");
 			}
 		}
 		echo \Helper\View::instance()->render("akismet/view/admin.html");
