@@ -50,12 +50,14 @@ class Base extends \Plugin {
 	 * @return \Model\Issue
 	 */
 	public function issueBeforeSave(\Model\Issue $issue) {
-		$helper = Helper::instance();
-		if ($helper->isSpam($issue->description, "issue")) {
-			$f3 = \Base::instance();
-			$log = new \Log("akismet.log");
-			$log->write("Issue blocked: " . $f3->get("IP") . " - " . $f3->get("AGENT"));
-			throw new \Exception("Spam detected, not saving.");
+		if ($issue->changed("description")) {
+			$helper = Helper::instance();
+			if ($helper->isSpam($issue->description, "issue")) {
+				$f3 = \Base::instance();
+				$log = new \Log("akismet.log");
+				$log->write("Issue blocked: " . $f3->get("IP") . " - " . $f3->get("AGENT"));
+				throw new \Exception("Spam detected, not saving.");
+			}
 		}
 		return $issue;
 	}
